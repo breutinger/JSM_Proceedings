@@ -1,4 +1,4 @@
-# Filename: BRdendro-JSM-Poster_2024_10_02
+# Filename: BRdendro_JSM_Figures_4-6
 
 # Last updated by: Bailey Reutinger
 # Last update date: 2024-10-02
@@ -16,7 +16,7 @@
 rm(list=ls())
 options(width = 80)
 
-filename <-"BRdendro-JSM-Poster_2024_10_02" 
+filename <-"BRdendro-JSM_Figures_4-6" 
 
 sink(paste(filename, ".log", sep = "")) # create log file to store output
 
@@ -36,7 +36,7 @@ setwd ("~/Elon/BRDendro/Data")
 ## 01 Create Data Frame
 
 ## 01.1 Read in csv
-EUF <- read.csv("EUF_JSM.csv")
+EUF <- read.csv("EUF.csv")
 
 ## 01.2 Convert csv data to data frame
 EUF.df <- as.data.frame(EUF)
@@ -285,7 +285,7 @@ lines(EUF.8.2.avg.spl$Plot.8.2.spl.avg ~ EUF.8.2.avg.spl$Year.Measure)
 
 
 ## 15 Correlation of 8-2 E and W cores
-EUF2 <- read.csv("Tree-ring Measurements_2024-06-24v2.csv")
+EUF2 <- read.csv("EUF2.csv")
 cor.test(EUF2$X3.3.E, EUF2$X3.3.W)
 
 # close log
