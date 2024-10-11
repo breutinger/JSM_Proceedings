@@ -1,0 +1,138 @@
+
+> # R version
+> R.version.string
+[1] "R version 4.3.2 (2023-10-31 ucrt)"
+
+> #### Project Code ####
+> 
+> ## 00 load libraries
+> library(dplR)
+
+> #set working directory
+> setwd ("~/Elon/BRDendro/Data")
+
+> ## 01 Create Data Frame
+> 
+> ## 01.1 Read in csv
+> EUF <- read.csv("EUF.csv")
+
+> ## 01.2 Convert csv data to data frame
+> EUF.df <- as.data.frame(EUF)
+
+> ## 01.3 Add year vector to data frame
+> years <- EUF.df$Year.Measure
+
+> ## 02 Create functions
+> 
+> ## 02.1 Calculate the p value
+> pCalc <- function(NumYears){
++   Years67<- NumYears*0.67
++   freqVal <- 1/Years67
++   nu .... [TRUNCATED] 
+
+> ## 02.2 Calculate spline fits
+> 
+> spl.fit <- function(n, p, y){
++   # Fits a smoothing spline to the data for based on the CP methods. 
++   
++   #  .... [TRUNCATED] 
+
+> ## METHOD 1: Create splines for each core and take the average
+> 
+> ## 03 Find smoothing parameter (p) for a core
+> 
+> ## 03.1  W core
+> X8.2.W.n <- .... [TRUNCATED] 
+
+> X8.2.W.p <- pCalc(X8.2.W.n)
+
+> ## 03.2 E core
+> X8.2.E.n <- length(na.omit(EUF.df$`X8.2.E`))
+
+> X8.2.E.p <- pCalc(X8.2.E.n)
+
+> ## 04 Calculate spline fit 
+> 
+> ## 04.1 W core
+> X8.2.W.spl.Va <- spl.fit(n = X8.2.W.n, 
++                          p = X8.2.W.p, 
++                .... [TRUNCATED] 
+
+> ## 04.2 E core
+> X8.2.E.spl.Va <- spl.fit(n = X8.2.E.n, 
++                          p = X8.2.E.p, 
++                          y = na.omit(EUF.df$`X8 .... [TRUNCATED] 
+
+> ## 05 Standardize the fit
+> 
+> ## 05.1 W core
+> X8.2.W.std <- na.omit(EUF.df$`X8.2.W`) / X8.2.W.spl.Va
+
+> ## 05.2 E core
+> X8.2.E.std <- na.omit(EUF.df$`X8.2.E`) / X8.2.E.spl.Va
+
+> ## METHOD 2: Create a spline of average measurements
+> 
+> ## 06 Find average of EUF 8-2 cores
+> Plot.8.2.avgV2 <- rowMeans(EUF.df[, c("X8.2.W", "X8. ..." ... [TRUNCATED] 
+
+> ## 07 Find smoothing parameter (p) for average
+> Plot.8.2.avgV2.n <- length(na.omit(Plot.8.2.avgV2)) 
+
+> Plot.8.2.avgV2.p <- pCalc(Plot.8.2.avgV2.n) 
+
+> ## 08 Calculate spline fit 
+> Plot.8.2.avgV2.spl.Va <- spl.fit(n = Plot.8.2.avgV2.n, 
++                                  p = Plot.8.2.avgV2.p,
++     .... [TRUNCATED] 
+
+> ## 09 Standardize the fit
+> Plot.8.2.avgV2.std <- na.omit(Plot.8.2.avgV2) / Plot.8.2.avgV2.spl.Va 
+
+> ## 10 Create data frame with cores of interest
+> 
+> ## 10.1
+> EUF.spl.df <- EUF.df[, c("Year.Measure", "X8.2.E", "X8.2.W")] 
+
+> ## 10.2 for each core, add a vector to the df that contains NA for first part, then 
+> # adds the spline fit for the rest. The spline fit should ali .... [TRUNCATED] 
+
+> EUF.spl.df$Plot.8.2.W.spl <- c(rep(NA, length(EUF.spl.df$X8.2.W) - X8.2.W.n), 
++                                X8.2.W.spl.Va)
+
+> ## 11 Create the average of the spline fits (stored in the df) using rowMeans
+> EUF.spl.df$Plot8.2.avg.spl <- 
++   rowMeans(EUF.spl.df[, c("Plot.8.2 ..." ... [TRUNCATED] 
+
+> ## 12 Store average of spline fits in subset without missing data present
+> EUF.8.2.avg.spl <- EUF.spl.df[!is.nan(EUF.spl.df$Plot8.2.avg.spl),
++     .... [TRUNCATED] 
+
+> ## 13 add the spline of averages to this new subset
+> EUF.8.2.avg.spl$Plot.8.2.spl.avg <- Plot.8.2.avgV2.spl.Va
+
+> ## 14 Graph Figures 4-6
+> 
+> ## 14.1 Figure 4:Raw tree ring measurements of the west (W) (black line) and 
+> # east (E) (gray line) cores taken from .... [TRUNCATED] 
+
+> lines(EUF$X8.2.W ~ EUF$Year)
+
+> ## 14.2 Figure 5: Cubic smoothing spline (black line) created from the average 
+> # (gray line) of the east (E) and west (W) cores of tree 8-2 in EU .... [TRUNCATED] 
+
+> lines(Plot.8.2.avgV2.spl.Va ~ years)
+
+> ## 14.3 Figure 6: Spline of the average measurements (black line) plotted
+> # against the average of splines (gray line) using the W and E cores of  .... [TRUNCATED] 
+
+> lines(EUF.8.2.avg.spl$Plot.8.2.spl.avg ~ EUF.8.2.avg.spl$Year.Measure)
+
+> ## 15 Correlation of 8-2 E and W cores
+> EUF2 <- read.csv("EUF2.csv")
+
+> cor(EUF2$X8.2.E, EUF2$X8.2.W, use = "pairwise.complete.obs")
+[1] 0.3334587
+
+> # close log
+> sink()
