@@ -1,4 +1,4 @@
-# Filename: BRdendro_JSM_Figures_4-6
+# Filename: BRdendro-JSM_Figures_4-6
 
 # Last updated by: Bailey Reutinger
 # Last update date: 2024-10-02
@@ -16,7 +16,7 @@
 rm(list=ls())
 options(width = 80)
 
-filename <-"BRdendro-JSM_Figures_4-6" 
+filename <-"BRdendro_JSM_Figures_4-6" 
 
 sink(paste(filename, ".log", sep = "")) # create log file to store output
 
@@ -286,8 +286,7 @@ lines(EUF.8.2.avg.spl$Plot.8.2.spl.avg ~ EUF.8.2.avg.spl$Year.Measure)
 
 ## 15 Correlation of 8-2 E and W cores
 EUF2 <- read.csv("EUF2.csv")
-cor.test(EUF2$X3.3.E, EUF2$X3.3.W)
+cor(EUF2$X8.2.E, EUF2$X8.2.W, use = "pairwise.complete.obs")
 
 # close log
 sink()
-
